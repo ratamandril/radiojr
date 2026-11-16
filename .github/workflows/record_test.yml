@@ -4,7 +4,6 @@ on:
   schedule:
     # 18:10 UTC equivale a la 1:10 PM en hora de Perú (UTC-5)
     - cron: '10 18 * * *'
-  # Permite ejecutar la tarea manualmente desde la pestaña "Actions" para hacer pruebas
   workflow_dispatch:
 
 jobs:
@@ -20,11 +19,11 @@ jobs:
       - name: Grabar radio durante 60 segundos
         run: |
           FECHA=$(TZ="America/Lima" date +"%Y-%m-%d_%H-%M")
-          ffmpeg -y -i "http://tupanel.info/stream/radiojr/stream" -t 60 -c copy "radiojr_${FECHA}.mp3"
+          ffmpeg -y -i "http://tupanel.info/stream/radiojr/stream" -t 60 -c copy "radiojr_${FECHA}.aac"
 
       - name: Guardar grabación como Artifact
         uses: actions/upload-artifact@v4
         with:
           name: grabacion-radiojr-${{ github.run_number }}
-          path: radiojr_*.mp3
+          path: radiojr_*.aac
           retention-days: 7
